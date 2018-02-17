@@ -15,6 +15,8 @@ class Post extends Model
     use Translatable,
         Resizable,
         HasRelationships;
+    
+    protected $table = 'vyg_posts';
 
     protected $translatable = ['title', 'seo_title', 'excerpt', 'body', 'slug', 'meta_description', 'meta_keywords'];
 
