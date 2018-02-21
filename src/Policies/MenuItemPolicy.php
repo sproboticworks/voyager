@@ -38,7 +38,7 @@ class MenuItemPolicy extends BasePolicy
 
         // If permission doesn't exist, we can't check it!
         if (!Voyager::model('Permission')->where('key', 'browse_'.$slug)->exists()) {
-            return true;
+            return false;
         }
 
         return $user->hasPermission('browse_'.$slug);

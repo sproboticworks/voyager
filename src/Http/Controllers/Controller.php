@@ -246,8 +246,13 @@ abstract class Controller extends BaseController
 
                     foreach ($files as $key => $file) {
                         $filename = Str::random(20);
-                        $path = $slug.'/'.date('FY').'/';
-                        array_push($filesPath, $path.$filename.'.'.$file->getClientOriginalExtension());
+                        //$path = $slug.'/'.date('FY').'/';
+                        $prefix = $slug;
+                        if(method_exists($row->dataType->model_name,'getAssetPrefix')) {
+                            $prefix = call_user_func(array($row->dataType->model_name, 'getAssetPrefix'));
+                        }
+                        $path = config('voyager.storage.root','').$prefix;
+                        array_push($filesPath, $filename.'.'.$file->getClientOriginalExtension());
                         $filePath = $path.$filename.'.'.$file->getClientOriginalExtension();
 
                         $image = Image::make($file)->resize(
@@ -347,12 +352,17 @@ abstract class Controller extends BaseController
                     $file = $request->file($row->field);
                     $options = json_decode($row->details);
 
-                    $path = $slug.'/'.date('FY').'/';
+                    //$path = $slug.'/'.date('FY').'/';
+                    $prefix = $slug;
+                    if(method_exists($row->dataType->model_name,'getAssetPrefix')) {
+                        $prefix = call_user_func(array($row->dataType->model_name, 'getAssetPrefix'));
+                    }
+                    $path = config('voyager.storage.root','').$prefix;
                     if (isset($options->preserveFileUploadName) && $options->preserveFileUploadName) {
                         $filename = basename($file->getClientOriginalName(), '.'.$file->getClientOriginalExtension());
                         $filename_counter = 1;
 
-                        // Make sure the filename does not exist, if it does make sure to add a number to the end 1, 2, 3, etc...
+                        // Make sure the filename does not exist, if it does make onsure to add a number to the end 1, 2, 3, etc...
                         while (Storage::disk(config('voyager.storage.disk'))->exists($path.$filename.'.'.$file->getClientOriginalExtension())) {
                             $filename = basename($file->getClientOriginalName(), '.'.$file->getClientOriginalExtension()).(string) ($filename_counter++);
                         }
@@ -365,7 +375,8 @@ abstract class Controller extends BaseController
                         }
                     }
 
-                    $fullPath = $path.$filename.'.'.$file->getClientOriginalExtension();
+                    $filenameWithExtension = $filename.'.'.$file->getClientOriginalExtension();
+                    $fullPath = $path.$filenameWithExtension;
 
                     $resize_width = null;
                     $resize_height = null;
@@ -443,7 +454,7 @@ abstract class Controller extends BaseController
                         }
                     }
 
-                    return $fullPath;
+                    return $filenameWithExtension;
                 }
                 break;
 

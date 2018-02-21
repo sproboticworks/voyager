@@ -12,6 +12,10 @@ class DataRow extends Model
 
     public $timestamps = false;
 
+    public function dataType() {
+        return $this->belongsTo(DataType::class);
+    }
+
     public function rowBefore()
     {
         $previous = self::where('data_type_id', '=', $this->data_type_id)->where('order', '=', ($this->order - 1))->first();
