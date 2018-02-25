@@ -21,4 +21,8 @@ class Role extends Model
     {
         return $this->belongsToMany(Voyager::modelClass('Permission'));
     }
+
+    public function operations() {
+        return $this->belongsToMany(Voyager::modelClass('Operation'));
+    }
 }
