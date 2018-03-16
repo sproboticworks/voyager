@@ -21,26 +21,36 @@ class MenuItemPolicy extends BasePolicy
      */
     protected function checkPermission(User $user, $model, $action)
     {
-        $regex = str_replace('/', '\/', preg_quote(route('voyager.dashboard')));
-        $slug = preg_replace('/'.$regex.'/', '', $model->link(true));
-        $slug = str_replace('/', '', $slug);
+        // $regex = str_replace('/', '\/', preg_quote(route('voyager.dashboard')));
+        // $slug = preg_replace('/'.$regex.'/', '', $model->link(true));
+        // $slug = str_replace('/', '', $slug);
 
-        if (!isset(self::$datatypes[$slug])) {
-            self::$datatypes[$slug] = DataType::where('slug', $slug)->first();
-        }
-        if ($str = self::$datatypes[$slug]) {
-            $slug = $str->name;
+        // if (!isset(self::$datatypes[$slug])) {
+        //     self::$datatypes[$slug] = DataType::where('slug', $slug)->first();
+        // }
+        // if ($str = self::$datatypes[$slug]) {
+        //     $slug = $str->name;
+        // }
+
+        // if ($slug == '') {
+        //     $slug = 'admin';
+        // }
+
+        // // If permission doesn't exist, we can't check it!
+        // if (!Voyager::model('Permission')->where('key', 'browse_'.$slug)->exists()) {
+        //     return false;
+        // }
+
+        // return $user->hasPermission('browse_'.$slug);
+
+        $canView = ($user->role->menuItems()->find($model->id))? true: false;
+
+        if(!$canView) {
+            if($model->operation)
+                $canView = $user->can('do', $model->operation);
         }
 
-        if ($slug == '') {
-            $slug = 'admin';
-        }
-
-        // If permission doesn't exist, we can't check it!
-        if (!Voyager::model('Permission')->where('key', 'browse_'.$slug)->exists()) {
-            return false;
-        }
-
-        return $user->hasPermission('browse_'.$slug);
+        return $canView;
+        
     }
 }

@@ -1,10 +1,10 @@
 <?php
 
 use Illuminate\Database\Seeder;
-use TCG\Voyager\Models\Permission;
+use TCG\Voyager\Models\Operation;
 use TCG\Voyager\Models\Role;
 
-class PermissionRoleTableSeeder extends Seeder
+class OperationRoleTableSeeder extends Seeder
 {
     /**
      * Auto generated seed file.
@@ -15,10 +15,10 @@ class PermissionRoleTableSeeder extends Seeder
     {
         $role = Role::where('name', 'admin')->firstOrFail();
 
-        $permissions = Permission::all();
+        $operations = Operation::all();
 
-        $role->permissions()->sync(
-            $permissions->pluck('id')->all()
+        $role->operations()->sync(
+            $operations->pluck('id')->all()
         );
     }
 }

@@ -17,7 +17,7 @@ class CreateOperationRoleTable extends Migration
             $table->increments('id');
             $table->integer('role_id')->unsigned();
             $table->integer('operation_id')->unsigned();
-            $table->integer('menu_item_id')->unsigned();
+            $table->integer('menu_item_id')->unsigned()->nullable();
 
             $table->foreign('role_id')->references('id')->on('roles');
             $table->foreign('operation_id')->references('id')->on('operations');

@@ -32,6 +32,10 @@ class MenuItem extends Model
         return $this->belongsTo(Voyager::modelClass('Menu'));
     }
 
+    public function operation() {
+        return $this->belongsTo(Operation::class);
+    }
+
     public function link($absolute = false)
     {
         return $this->prepareLink($absolute, $this->route, $this->parameters, $this->url);

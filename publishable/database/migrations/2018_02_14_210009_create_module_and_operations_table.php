@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use TCG\Voyager\Models\Operation;
 
 class CreateModuleAndOperationsTable extends Migration
 {
@@ -16,7 +17,7 @@ class CreateModuleAndOperationsTable extends Migration
         if(!Schema::hasTable('modules')) {
             Schema::create('modules', function (Blueprint $table) {
                 $table->increments('id');
-                $table->integer('parent_module_id')->unsigned();
+                $table->integer('parent_module_id')->unsigned()->nullable();
                 $table->string('code','50');
                 $table->string('name','100');
                 $table->timestamps();
@@ -28,14 +29,16 @@ class CreateModuleAndOperationsTable extends Migration
         if(!Schema::hasTable('operations')) {
             Schema::create('operations', function (Blueprint $table) {
                 $table->increments('id');
-                $table->integer('parent_operation_id')->unsigned();
+                $table->integer('data_type_id')->unsigned()->nullable();
+                $table->integer('parent_operation_id')->unsigned()->nullable();
                 $table->string('code','50');
                 $table->string('name','100');
                 $table->string('route','100');
-                $table->enum('action',['INDEX', 'CREATE', 'STORE', 'SHOW', 'EDIT', 'UPDATE', 'DESTROY', 'DELETE', 'GET', 'ACCEPT', 'APPROVE', 'PUBLISH', 'SCHEDULE', 'CANCEL', 'UPLOAD']);
+                $table->enum('action',Operation::ACTIONS);
                 $table->timestamps();
 
                 $table->foreign('parent_operation_id')->references('id')->on('operations');
+                $table->foreign('data_type_id')->references('id')->on('data_types');
             });
         }
     }

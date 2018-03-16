@@ -23,6 +23,10 @@ class Role extends Model
     }
 
     public function operations() {
-        return $this->belongsToMany(Voyager::modelClass('Operation'));
+        return $this->belongsToMany(Operation::class)->withPivot('menu_item_id')->withTimestamps();
+    }
+
+    public function menuItems() {
+        return $this->belongsToMany(MenuItem::class, 'operation_role')->withPivot('operation_id')->withTimestamps();
     }
 }

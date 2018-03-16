@@ -5,6 +5,7 @@ namespace TCG\Voyager\Policies;
 use Illuminate\Auth\Access\HandlesAuthorization;
 use TCG\Voyager\Contracts\User;
 use TCG\Voyager\Facades\Voyager;
+use TCG\Voyager\Models\Operation;
 
 class BasePolicy
 {
@@ -52,6 +53,26 @@ class BasePolicy
 
         $dataType = self::$datatypes[get_class($model)];
 
-        return $user->hasPermission($action.'_'.$dataType->name);
+        $hasPermission = false;
+        $operationAction = $this->convertBreadActionToOperationAction($action);
+
+        $operation = Operation::where('data_type_id', $dataType->id)
+                                ->where('action', $operationAction)->first();
+        if($operation) {
+            $hasPermission = $user->can('do', $operation);
+        }
+        //if(!$hasPermission)
+            //$hasPermission = $user->hasPermission($action.'_'.$dataType->name);
+
+        return $hasPermission;
+    }
+
+    public function convertBreadActionToOperationAction($breadAction) {
+        $breadOperationActionMap = array('BROWSE'=>'INDEX', 'READ'=>'SHOW', 'ADD'=>'STORE');
+        $operationAction = strtoupper($breadAction);
+        if(array_key_exists(strtoupper($breadAction), $breadOperationActionMap)) {
+            $operationAction = $breadOperationActionMap[strtoupper($breadAction)];
+        } 
+        return $operationAction;
     }
 }

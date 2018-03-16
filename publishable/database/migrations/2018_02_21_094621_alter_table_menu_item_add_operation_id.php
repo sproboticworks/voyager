@@ -14,7 +14,7 @@ class AlterTableMenuItemAddOperationId extends Migration
     public function up()
     {
         Schema::table('menu_items', function (Blueprint $table) {
-            $table->integer('operation_id')->nullable()->after('parent_id');
+            $table->integer('operation_id')->unsigned()->nullable()->after('parent_id');
             $table->foreign('operation_id')->references('id')->on('operations');            
         });
     }

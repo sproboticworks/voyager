@@ -21,18 +21,18 @@ Route::group(['as' => 'voyager.'], function () {
 
     $namespacePrefix = '\\'.config('voyager.controllers.namespace').'\\';
 
-    Route::get('login', ['uses' => $namespacePrefix.'VoyagerAuthController@login',     'as' => 'login']);
-    Route::post('login', ['uses' => $namespacePrefix.'VoyagerAuthController@postLogin', 'as' => 'postlogin']);
+    Route::get('login', ['uses' => $namespacePrefix.'VoyagerAuthController@login',     'as' => 'login', 'data_type' => 'users']);
+    Route::post('login', ['uses' => $namespacePrefix.'VoyagerAuthController@postLogin', 'as' => 'post_login', 'data_type' => 'users']);
 
     Route::group(['middleware' => 'admin.user'], function () use ($namespacePrefix) {
         event(new RoutingAdmin());
 
         // Main Admin and Logout Route
-        Route::get('/', ['uses' => $namespacePrefix.'VoyagerController@index',   'as' => 'dashboard']);
-        Route::post('logout', ['uses' => $namespacePrefix.'VoyagerController@logout',  'as' => 'logout']);
-        Route::post('upload', ['uses' => $namespacePrefix.'VoyagerController@upload',  'as' => 'upload']);
+        Route::get('/', ['uses' => $namespacePrefix.'VoyagerController@index',   'as' => 'dashboard', 'data_type' => 'users']);
+        Route::post('logout', ['uses' => $namespacePrefix.'VoyagerController@logout',  'as' => 'logout', 'data_type' => 'users']);
+        Route::post('upload', ['uses' => $namespacePrefix.'VoyagerController@upload',  'as' => 'upload', 'data_type' => 'users']);
 
-        Route::get('profile', ['uses' => $namespacePrefix.'VoyagerController@profile', 'as' => 'profile']);
+        Route::get('profile', ['uses' => $namespacePrefix.'VoyagerController@profile', 'as' => 'profile', 'data_type' => 'users']);
 
         try {
             foreach (DataType::all() as $dataType) {
@@ -63,9 +63,9 @@ Route::group(['as' => 'voyager.'], function () {
                 'as'     => 'item.',
                 'prefix' => 'item',
             ], function () use ($namespacePrefix) {
-                Route::delete('{id}', ['uses' => $namespacePrefix.'VoyagerMenuController@delete_menu', 'as' => 'destroy']);
-                Route::post('/', ['uses' => $namespacePrefix.'VoyagerMenuController@add_item',    'as' => 'add']);
-                Route::put('/', ['uses' => $namespacePrefix.'VoyagerMenuController@update_item', 'as' => 'update']);
+                Route::delete('{id}', ['uses' => $namespacePrefix.'VoyagerMenuController@delete_menu', 'as' => 'destroy', 'data_type' => 'menu_items']);
+                Route::post('/', ['uses' => $namespacePrefix.'VoyagerMenuController@add_item',    'as' => 'add', 'data_type' => 'menu_items']);
+                Route::put('/', ['uses' => $namespacePrefix.'VoyagerMenuController@update_item', 'as' => 'update', 'data_type' => 'menu_items']);
             });
         });
 

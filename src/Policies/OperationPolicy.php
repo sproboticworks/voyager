@@ -1,6 +1,6 @@
 <?php
 
-namespace Modules\Core\Policies;
+namespace TCG\Voyager\Policies;
 
 use TCG\Voyager\Models\User;
 use TCG\Voyager\Models\Operation;

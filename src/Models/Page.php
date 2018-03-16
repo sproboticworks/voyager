@@ -14,6 +14,8 @@ class Page extends Model
 
     protected $translatable = ['title', 'slug', 'body'];
 
+    protected $table = 'vyg_pages';
+
     /**
      * Statuses.
      */

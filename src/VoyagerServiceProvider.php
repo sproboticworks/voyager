@@ -21,9 +21,11 @@ use TCG\Voyager\FormFields\After\DescriptionHandler;
 use TCG\Voyager\Http\Middleware\VoyagerAdminMiddleware;
 use TCG\Voyager\Models\MenuItem;
 use TCG\Voyager\Models\Setting;
+use TCG\Voyager\Models\Operation;
 use TCG\Voyager\Policies\BasePolicy;
 use TCG\Voyager\Policies\MenuItemPolicy;
 use TCG\Voyager\Policies\SettingPolicy;
+use TCG\Voyager\Policies\OperationPolicy;
 use TCG\Voyager\Providers\VoyagerEventServiceProvider;
 use TCG\Voyager\Translator\Collection as TranslatorCollection;
 
@@ -37,6 +39,7 @@ class VoyagerServiceProvider extends ServiceProvider
     protected $policies = [
         Setting::class  => SettingPolicy::class,
         MenuItem::class => MenuItemPolicy::class,
+        Operation::class => OperationPolicy::class,
     ];
 
     /**
